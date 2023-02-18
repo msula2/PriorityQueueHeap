@@ -15,6 +15,8 @@ class Heap{
         void StartHeap(int N);
         void FreeHeap();
         void Insert(int item, int value);
+        void HeapifyUp(int index);
+        void SwapNodes(int parent, int child);
         HeapNode * getHeap();
     
     private:
