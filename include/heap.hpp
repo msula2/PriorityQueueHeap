@@ -21,6 +21,7 @@ class Heap{
         void Heapify_Down(int index);
         HeapNode FindMin();
         void ExtractMin();
+        void ChangeKey(HeapNode item, int newValue);
         void Print();
     
     private:

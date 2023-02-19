@@ -81,6 +81,25 @@ void Heap::Heapify_Down(int index)
         Heapify_Down(childIndex);
     }
 }
+void Heap::ChangeKey(HeapNode item, int newValue){
+    int itemPos = Position[item.data];
+    H[itemPos].priority = newValue;
+    int leftIndex = 2 * itemPos;
+    int rightIndex = 2 * itemPos + 1;
+    if(leftIndex < sizeHeap && 
+      H[itemPos].priority > H[leftIndex].priority ||    
+      rightIndex < sizeHeap &&
+      H[itemPos].priority > H[rightIndex].priority){
+
+        Heapify_Down(itemPos);
+    } 
+    else{
+        Heapify_Up(itemPos);
+    }
+        
+    
+
+}
 void Heap::Delete(int index)
 {
     SwapNodes(index, sizeHeap);

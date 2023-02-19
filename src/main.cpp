@@ -26,6 +26,7 @@ int main()
     cout << "\nAfter insertion...\n";
     H.Print();
 
+    /*
     HeapNode toDelete;
     cout << "\nEnter <data value> of node to delete: ";
     cin >> toDelete.data;
@@ -43,6 +44,14 @@ int main()
 
     H.ExtractMin();
     cout << "\nAfter Extraction of minimum...\n";
+    H.Print();
+    */
+
+    cout << "\nAfter Changing priority of node...\n";
+    HeapNode changeNode;
+    changeNode.data = 25;
+    changeNode.priority = 4;
+    H.ChangeKey(changeNode, changeNode.priority);
     H.Print();
 
     return 0;
