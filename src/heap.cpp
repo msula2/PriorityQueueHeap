@@ -7,16 +7,28 @@ Heap::Heap() = default;
 void Heap::StartHeap(int n)
 {
     std::vector<HeapNode> heap(n + 1); // vector of n HeapNodes
+    std::vector<int> p(n + 1); //vector to maintain position of elements in heap
     H = heap;
+    Position = p;
     sizeHeap = 0;
     N = n;
 }
 void Heap::SwapNodes(int parentIndex, int childIndex)
 {
 
-    HeapNode temp = H[parentIndex];
+    //Swap parent with child and vice versa
+    HeapNode tempNode = H[parentIndex];
     H[parentIndex] = H[childIndex];
-    H[childIndex] = temp;
+    H[childIndex] = tempNode;
+    
+    //Update position of elements in Position array
+    int posParent = H[parentIndex].priority;
+    int posChild = H[childIndex].priority;
+    int tempPos = Position[posParent];
+    Position[posParent] = Position[posChild];
+    Position[posChild] = tempPos;
+      
+      
 }
 // Moves an element located at the specified index upwards in the heap to correctly reposition it so that the element's prioirty is higher than parents
 void Heap::Heapify_Up(int index)
@@ -44,8 +56,9 @@ void Heap::Insert(int item, int value)
     node.priority = value;
     if (sizeHeap < N)
     {
-        H[sizeHeap + 1] = node; // H[0] is kept empty, element is inserted at end of array
+        H[sizeHeap + 1] = node; // H[0] is kept empty, element is inserted at end of array 
         sizeHeap += 1;
+        Position[node.priority] = sizeHeap; //Maps priority to location in heap
         Heapify_Up(sizeHeap);
     }
 }
@@ -55,7 +68,6 @@ void Heap::Heapify_Down(int index)
     int childIndex = 0;
     int leftIndex = 2 * index;
     int rightIndex = 2 * index + 1;
-    std::cout << "Left index = " << H[leftIndex].priority << " and " << "Right Index = " << H[rightIndex].priority << "\n";
     if (leftIndex > sizeHeap)
     {
         // No left child exists
@@ -65,7 +77,6 @@ void Heap::Heapify_Down(int index)
     {
         // Get mimimum of the two children if H[index]
         childIndex = H[leftIndex].priority < H[rightIndex].priority ? leftIndex : rightIndex;
-        std::cout << "Child = " << H[childIndex].priority << "\n";
     }
     else if (leftIndex = sizeHeap)
     {
@@ -77,32 +88,46 @@ void Heap::Heapify_Down(int index)
     {
         SwapNodes(index, childIndex);
         // Moving the element down, causes damaged site to move downwards, hence we call Heapify_Down again to fix it
-        std::cout << "After HeapifyDown " << H[index].priority << " and " << H[childIndex].priority << "\n";
-        printHeap();
         Heapify_Down(childIndex);
     }
 }
 void Heap::Delete(int index)
 {
 
-    std::cout << "After Delete " << H[index].priority << " and swap with " << H[sizeHeap].priority << "\n";
     SwapNodes(index, sizeHeap);
     H.erase(H.begin() + sizeHeap); // delete the element
     sizeHeap -= 1;                 // decrease size of heap
-    printHeap();
     Heapify_Down(index);
 }
-std::vector<HeapNode> Heap::getHeap()
-{
-    return H;
+
+HeapNode Heap::FindMin(){
+    
+    int front = 1;
+    return H[front];
 }
-void Heap::printHeap()
+void Heap::ExtractMin(){
+    
+    HeapNode min = FindMin();
+    int front = 1;
+    Delete(front);
+}
+void Heap::Print()
 {
+    std::cout << "Min Heap: |";
     for (int z = 0; z < H.size(); z++)
     {
         if (z != 0)
         {
-            std::cout << " Priority: " << H[z].priority << "\n";
+             std::cout << H[z].priority << "|";
         }
     }
+    std::cout << "\nPosition: |";
+    for (int x = 0; x < Position.size(); x++)
+    {
+        if (x != 0)
+        {
+             std::cout << Position[x] << "|";
+        }
+    }
+    std::cout << "\n";
 }
