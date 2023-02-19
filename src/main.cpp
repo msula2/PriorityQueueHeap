@@ -16,10 +16,10 @@ int main()
 
     for (int i = 0; i < N; i++)
     {
-        //cout << "Enter <data,priority> for node: ";
-        //scanf("%d,%d", &data, &priority);
-        cout << "Enter <priority> for node: ";
-        cin >> priority;
+        cout << "Enter <data,priority> for node: ";
+        scanf("%d,%d", &data, &priority);
+        //cout << "Enter <priority> for node: ";
+        //cin >> priority;
         H.Insert(data, priority);
     }
     cout << "\nAfter insertion...\n";

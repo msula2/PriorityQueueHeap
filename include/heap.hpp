@@ -1,7 +1,7 @@
 #ifndef HEAP_HPP
 #define HEAP_HPP
 #include <vector>
-
+#include <map>
 //Represents an individual node in the heap
 struct HeapNode{
     
@@ -26,6 +26,6 @@ class Heap{
         std::vector<HeapNode> H; //heap containing HeapNodes
         int N; //number of elements for which space was allocated
         int sizeHeap; //number of elements in the heap at any time, not the size of array
-        std::vector<int> Position; //vector for maintaining position of elements in heap
+        std::map<int,int> Position; //map for maintaining position of elements in heap
 };
 #endif

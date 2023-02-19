@@ -7,28 +7,21 @@ Heap::Heap() = default;
 void Heap::StartHeap(int n)
 {
     std::vector<HeapNode> heap(n + 1); // vector of n HeapNodes
-    std::vector<int> p(n + 1); //vector to maintain position of elements in heap
     H = heap;
-    Position = p;
     sizeHeap = 0;
     N = n;
 }
 void Heap::SwapNodes(int parentIndex, int childIndex)
 {
 
-    //Swap parent with child and vice versa
+    // Update position of elements in Position array
+    Position[H[parentIndex].data] = childIndex;
+    Position[H[childIndex].data] = parentIndex;
+
+    // Swap parent with child and vice versa
     HeapNode tempNode = H[parentIndex];
     H[parentIndex] = H[childIndex];
     H[childIndex] = tempNode;
-    
-    //Update position of elements in Position array
-    int posParent = H[parentIndex].priority;
-    int posChild = H[childIndex].priority;
-    int tempPos = Position[posParent];
-    Position[posParent] = Position[posChild];
-    Position[posChild] = tempPos;
-      
-      
 }
 // Moves an element located at the specified index upwards in the heap to correctly reposition it so that the element's prioirty is higher than parents
 void Heap::Heapify_Up(int index)
@@ -56,9 +49,9 @@ void Heap::Insert(int item, int value)
     node.priority = value;
     if (sizeHeap < N)
     {
-        H[sizeHeap + 1] = node; // H[0] is kept empty, element is inserted at end of array 
+        H[sizeHeap + 1] = node; // H[0] is kept empty, element is inserted at end of array
         sizeHeap += 1;
-        Position[node.priority] = sizeHeap; //Maps priority to location in heap
+        Position[node.data] = sizeHeap;
         Heapify_Up(sizeHeap);
     }
 }
@@ -100,13 +93,15 @@ void Heap::Delete(int index)
     Heapify_Down(index);
 }
 
-HeapNode Heap::FindMin(){
-    
+HeapNode Heap::FindMin()
+{
+
     int front = 1;
     return H[front];
 }
-void Heap::ExtractMin(){
-    
+void Heap::ExtractMin()
+{
+
     HeapNode min = FindMin();
     int front = 1;
     Delete(front);
@@ -118,16 +113,13 @@ void Heap::Print()
     {
         if (z != 0)
         {
-             std::cout << H[z].priority << "|";
+            std::cout << H[z].priority << "|";
         }
     }
+    
     std::cout << "\nPosition: |";
-    for (int x = 0; x < Position.size(); x++)
-    {
-        if (x != 0)
-        {
-             std::cout << Position[x] << "|";
-        }
+    for (auto& element : Position){
+        std::cout << element.first << "-" << element.second << "|";
     }
     std::cout << "\n";
 }
