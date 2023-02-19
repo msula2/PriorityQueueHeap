@@ -14,9 +14,12 @@ class Heap{
         Heap();
         void StartHeap(int N);
         void Insert(int item, int value);
-        void HeapifyUp(int index);
+        void Heapify_Up(int index);
         void SwapNodes(int parent, int child);
         std::vector<HeapNode> getHeap();
+        void Delete(int index);
+        void Heapify_Down(int index);
+        void printHeap();
     
     private:
         std::vector<HeapNode> H;

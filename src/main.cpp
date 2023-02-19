@@ -15,19 +15,17 @@ int main()
 
     for (int i = 0; i < N; i++)
     {
-        cout << "Enter <data,priority> for node: ";
-        scanf("%d,%d", &data, &priority);
+        //cout << "Enter <data,priority> for node: ";
+        //scanf("%d,%d", &data, &priority);
+        cout << "Enter <priority> for node: ";
+        cin >> priority;
         H.Insert(data, priority);
     }
-    std::vector<HeapNode> heap = H.getHeap();
-    for (int z = 0; z < heap.size(); z++)
-    {
-        if (z != 0)
-        {
-            cout << "Data: " << heap[z].data
-                 << " Priority: " << heap[z].priority
-                 << "\n";
-        }
-    }
+    cout << "After inserting\n";
+    H.printHeap();
+    H.Delete(2);
+    cout << "After deleting\n";
+    H.printHeap();
+
     return 0;
 }
