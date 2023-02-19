@@ -2,6 +2,16 @@
 #define HEAP_HPP
 #include <vector>
 #include <map>
+enum Methods
+{
+    Exit = 0,
+    Insert = 1,
+    Delete = 2,
+    FindMin = 3,
+    ExtractMin = 4,
+    ChangeKey = 5,
+    Print = 6
+};
 //Represents an individual node in the heap
 struct HeapNode{
     
@@ -23,6 +33,7 @@ class Heap{
         void ExtractMin();
         void ChangeKey(HeapNode item, int newValue);
         void Print();
+        void DisplayOptions();
     
     private:
         std::vector<HeapNode> H; //heap containing HeapNodes
