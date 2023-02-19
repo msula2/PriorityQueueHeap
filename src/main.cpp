@@ -19,17 +19,15 @@ int main()
         scanf("%d,%d", &data, &priority);
         H.Insert(data, priority);
     }
-    HeapNode *heapPtr = H.getHeap();
-    for (int z = 0; z < N; z++)
+    std::vector<HeapNode> heap = H.getHeap();
+    for (int z = 0; z < heap.size(); z++)
     {
         if (z != 0)
         {
-            cout << "Data: " << heapPtr[z].data
-                 << " Priority: " << heapPtr[z].priority
+            cout << "Data: " << heap[z].data
+                 << " Priority: " << heap[z].priority
                  << "\n";
         }
     }
-
-    H.FreeHeap();
     return 0;
 }

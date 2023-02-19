@@ -2,18 +2,12 @@
 #include <iostream>
 
 // Constructor
-Heap::Heap()
-{
-}
+Heap::Heap() = default;
 // Initializes an empty that is set to store at most N elements
 void Heap::StartHeap(int n)
 {
-
-    H = (HeapNode *)malloc((N + 1) * sizeof(HeapNode));
-    if (H == NULL){
-        std::cerr << "Error: Out of memory, aborting\n";
-        exit(-1);
-    }
+    std::vector<HeapNode> heap(n + 1); //vector of n HeapNodes
+    H = heap;
     sizeHeap = 0;
     N = n;
 }
@@ -56,11 +50,6 @@ void Heap::Insert(int item, int value)
         HeapifyUp(sizeHeap);
     }
 }
-HeapNode *Heap::getHeap()
-{
+std::vector<HeapNode> Heap::getHeap(){
     return H;
-}
-void Heap::FreeHeap()
-{
-    free(H);
 }
