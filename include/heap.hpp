@@ -13,10 +13,11 @@ class Heap{
     public:
         Heap();
         void StartHeap(int N);
-        void Insert(int item, int value);
+        void Insert(HeapNode item, int value);
         void Heapify_Up(int index);
         void SwapNodes(int parent, int child);
         void Delete(int index);
+        void Delete(HeapNode item);
         void Heapify_Down(int index);
         HeapNode FindMin();
         void ExtractMin();

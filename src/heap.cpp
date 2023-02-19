@@ -41,17 +41,14 @@ void Heap::Heapify_Up(int index)
 // Inserts the item with an ordering value (priority) into the heap at its end
 // After inserting uses Heapify_Up to position the item so it maintains the heap order
 // If the heap currently has n elements, the method takes O(logn) time
-void Heap::Insert(int item, int value)
+void Heap::Insert(HeapNode item, int value)
 {
 
-    HeapNode node;
-    node.data = item;
-    node.priority = value;
     if (sizeHeap < N)
     {
-        H[sizeHeap + 1] = node; // H[0] is kept empty, element is inserted at end of array
+        H[sizeHeap + 1] = item; // H[0] is kept empty, element is inserted at end of array
         sizeHeap += 1;
-        Position[node.data] = sizeHeap;
+        Position[item.data] = sizeHeap;
         Heapify_Up(sizeHeap);
     }
 }
@@ -86,16 +83,18 @@ void Heap::Heapify_Down(int index)
 }
 void Heap::Delete(int index)
 {
-
     SwapNodes(index, sizeHeap);
     H.erase(H.begin() + sizeHeap); // delete the element
     sizeHeap -= 1;                 // decrease size of heap
     Heapify_Down(index);
 }
-
+void Heap::Delete(HeapNode item){
+    int deleteIndex = Position[item.data]; //find index of element to delete using map
+    Delete(deleteIndex); //remove element from heap
+    Position.erase(item.data);  //remove the element from map
+}
 HeapNode Heap::FindMin()
 {
-
     int front = 1;
     return H[front];
 }
@@ -105,6 +104,7 @@ void Heap::ExtractMin()
     HeapNode min = FindMin();
     int front = 1;
     Delete(front);
+    Position.erase(min.data);
 }
 void Heap::Print()
 {

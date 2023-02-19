@@ -18,25 +18,25 @@ int main()
     {
         cout << "Enter <data,priority> for node: ";
         scanf("%d,%d", &data, &priority);
-        //cout << "Enter <priority> for node: ";
-        //cin >> priority;
-        H.Insert(data, priority);
+        HeapNode node;
+        node.data = data;
+        node.priority = priority;
+        H.Insert(node, priority);
     }
     cout << "\nAfter insertion...\n";
     H.Print();
-    
-    int deleteIndex = 0;
-    cout << "\nEnter <index> for node to delete: ";
-    cin >> deleteIndex;
-    H.Delete(deleteIndex);
-    cout << "\nAfter deletion at index " << deleteIndex << " ...\n";
+
+    HeapNode toDelete;
+    cout << "\nEnter <data value> of node to delete: ";
+    cin >> toDelete.data;
+    H.Delete(toDelete);
+    cout << "\nAfter deletion of node with data " <<  toDelete.data << " ...\n";
     H.Print();
 
-    
     HeapNode min;
     min = H.FindMin();
     cout << "\nFinding minimum...\n";
-    cout << "Minimum Node: " 
+    cout << "Minimum Node: "
          << "priority = " << min.priority
          << " | data = " << min.data
          << "\n";
