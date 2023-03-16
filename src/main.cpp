@@ -65,6 +65,7 @@ public:
     }
     void Dijkstra()
     {
+        cout << "\nDijkstra... \n";
         dist[start] = 0;
         Heap Q{};
         Q.StartHeap(V);
@@ -98,15 +99,18 @@ public:
 
             }
         }
+        cout << "Shortest Distance from " << start << " to: \n";
         for (int t = 0 ; t < V ; t++){
-            cout << t << " | " << dist[t] << "\n";
+            cout << "Node " << t << " = " << dist[t] << "\n";
         }
     }
     void printGraph()
     {
+        cout << "\nGraph Contents... \n";
         int v = 0;
         for (int x = 0; x < adj->size(); x++)
         {
+            cout << "\n----------------------\n";
             cout << "Vertex: " << x << "\n";
             cout << "Neighbors: ";
             for (int y = 0; y < adj->at(x).size(); y++)
@@ -116,7 +120,7 @@ public:
                      << ")"
                      << ",";
             }
-            cout << "\n";
+            cout << "\n----------------------\n";
         }
     }
 
