@@ -34,6 +34,7 @@ class Heap{
         void ChangeKey(HeapNode item, int newValue);
         void Print();
         void DisplayOptions();
+        int getHeapSize();
     
     private:
         std::vector<HeapNode> H; //heap containing HeapNodes

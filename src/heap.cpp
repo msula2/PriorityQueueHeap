@@ -276,5 +276,9 @@ void Heap::DisplayOptions()
         }
     }
 
-    DisplayOptions();
+    //DisplayOptions();
 }
+int Heap::getHeapSize(){
+    return sizeHeap;
+}
+
