@@ -35,7 +35,7 @@ public:
                 {
                     fscanf(fptr, "%d %d\n", &V, &E);
                     lines += 1;
-                    adj.resize(V, vector<Edge>(E));
+                    adj.resize(V);
                 }
                 else if (lines == 1)
                 {
@@ -51,7 +51,7 @@ public:
                         Edge e;
                         e.vertex = v2;
                         e.distance = dist;
-                        adj[v1][v2] = e;
+                        adj[v1].push_back(e);
                     }
                 }
             }
