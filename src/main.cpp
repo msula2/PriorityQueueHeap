@@ -22,7 +22,7 @@ public:
         int lines = 0;
 
         FILE *fptr;
-        if ((fptr = fopen("./include/tests/test-1.txt", "r")) == NULL)
+        if ((fptr = fopen("./include/tests/test-49.txt", "r")) == NULL)
         {
             printf("Error in opening file\n");
             exit(1);
@@ -82,13 +82,16 @@ public:
             node.priority = dist[v];
             Q.Insert(node, dist[v]);
         }
-        
-        while (Q.getHeapSize() > 0){
+
+        while (Q.getHeapSize() > 0)
+        {
             HeapNode u = Q.FindMin();
             Q.ExtractMin();
-            for (auto& neigh : adj->at(u.data)){
+            for (auto &neigh : adj->at(u.data))
+            {
                 int alt = dist[u.data] + neigh.distance;
-                if (alt < dist[neigh.vertex]){
+                if (alt < dist[neigh.vertex])
+                {
                     dist[neigh.vertex] = alt;
                     prev[neigh.vertex] = u.data;
                     HeapNode n;
@@ -96,12 +99,18 @@ public:
                     n.priority = alt;
                     Q.ChangeKey(n, alt);
                 }
-
             }
         }
         cout << "Shortest Distance from " << start << " to: \n";
-        for (int t = 0 ; t < V ; t++){
-            cout << "Node " << t << " = " << dist[t] << "\n";
+        for (int t = 0; t < V; t++)
+        {
+            if (t != start)
+            {
+                cout << "Node " << t << " = "
+                     << dist[t] << " | "
+                                   "Prev "
+                     << prev[t] << "\n";
+            }
         }
     }
     void printGraph()
@@ -127,7 +136,7 @@ public:
     void deleteGraph()
     {
 
-        vector<vector<Edge>>().swap(*adj);
+        //vector<vector<Edge>>().swap(*adj);
         delete[] dist;
         delete[] prev;
     }
@@ -148,6 +157,6 @@ int main()
     G.createGraph();
     G.printGraph();
     G.Dijkstra();
-    G.deleteGraph();
+    //G.deleteGraph();
     return 0;
 }
