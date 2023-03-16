@@ -35,7 +35,8 @@ public:
                 {
                     fscanf(fptr, "%d %d\n", &V, &E);
                     lines += 1;
-                    adj.resize(V);
+                    adj = new vector<vector<Edge>> (V);
+                    
                 }
                 else if (lines == 1)
                 {
@@ -51,7 +52,7 @@ public:
                         Edge e;
                         e.vertex = v2;
                         e.distance = dist;
-                        adj[v1].push_back(e);
+                        adj->at(v1).push_back(e);
                     }
                 }
             }
@@ -60,29 +61,33 @@ public:
 
         return;
     }
+    void Dijkstra(int source){
+
+    }
+    
     void printGraph()
     {
         int v = 0;
-        for (auto &vertex : adj)
-        {
-            cout << "Vertex: " << v << "\n";
+        for (int x = 0; x < adj->size(); x++){
+            cout << "Vertex: " << x << "\n";
             cout << "Neighbors: ";
-            for (auto &edges : vertex)
-            {
-                cout << edges.vertex << "(" << edges.distance << ")"
-                     << ",";
+            for (int y = 0 ; y < adj->at(x).size() ; y++){
+                cout << adj->at(x).at(y).vertex 
+                << "(" << adj->at(x).at(y).distance 
+                << ")" << ","; 
             }
-            v += 1;
             cout << "\n";
         }
+        
     }
+    
 
 private:
     int V;
     int E;
     int start;
     int end;
-    vector<vector<Edge>> adj;
+    vector<vector<Edge>> * adj;
 };
 
 int main()
