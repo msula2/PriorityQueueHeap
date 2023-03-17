@@ -2,6 +2,8 @@
 #include <heap.hpp>
 #include <iostream>
 #include <stdlib.h>
+#include <map>
+#include <list>
 
 using namespace std;
 #define INFINITY 1000000
@@ -17,6 +19,9 @@ class Graph
 {
 public:
     Graph() = default;
+    ~Graph(){
+        delete[] dist;
+    }
     void createGraph()
     {
         int lines = 0;
@@ -36,9 +41,7 @@ public:
                 {
                     fscanf(fptr, "%d %d\n", &V, &E);
                     lines += 1;
-                    adj = new vector<vector<Edge>>(V);
                     dist = new int(V);
-                    prev = new vector<vector<int>>(V);
                 }
                 else if (lines == 1)
                 {
@@ -51,10 +54,7 @@ public:
                     lines += 1;
                     if (v1 != v2)
                     {
-                        Edge e;
-                        e.vertex = v2;
-                        e.distance = distance;
-                        adj->at(v1).push_back(e);
+                        adj[v1][v2] = distance;
                     }
                 }
             }
@@ -63,14 +63,16 @@ public:
 
         return;
     }
-    void Dijkstra()
+
+    void dijkstra()
     {
         cout << "\nDijkstra... \n";
         dist[start] = 0;
         Heap Q{};
         Q.StartHeap(V);
+        prev = new vector<vector<int>>(V);
 
-        for (int v = 0; v < adj->size(); v++)
+        for (int v = 0; v < V; v++)
         {
             if (v != start)
             {
@@ -86,64 +88,63 @@ public:
         {
             HeapNode u = Q.FindMin();
             Q.ExtractMin();
-            for (auto &neigh : adj->at(u.data))
+            for (auto &neigh : adj[u.data])
             {
-                int alt = dist[u.data] + neigh.distance;
-                if (alt < dist[neigh.vertex])
+                int alt = dist[u.data] + neigh.second;
+                if (alt < dist[neigh.first])
                 {
-                    dist[neigh.vertex] = alt;
-                    prev->at(neigh.vertex).clear();
-                    prev->at(neigh.vertex).push_back(u.data);
+                    dist[neigh.first] = alt;
+                    prev->at(neigh.first).clear();
+                    prev->at(neigh.first).push_back(u.data);
                     HeapNode n;
-                    n.data = neigh.vertex;
+                    n.data = neigh.first;
                     n.priority = alt;
                     Q.ChangeKey(n, alt);
                 }
-                else if (alt == dist[neigh.vertex]){
-                    dist[neigh.vertex] = alt;
-                    prev->at(neigh.vertex).push_back(u.data);
+                else if (alt == dist[neigh.first])
+                {
+                    dist[neigh.first] = alt;
+                    prev->at(neigh.first).push_back(u.data);
                 }
             }
         }
+    }
+    void almostShortestPath()
+    {
+        dijkstra();
+    }
+    void printShortestPath()
+    {
         cout << "Shortest Distance from " << start << " to: \n";
         for (int t = 0; t < V; t++)
         {
             if (t != start)
             {
                 cout << "Node " << t << " = " << dist[t] << " | Previous = ";
-                for(auto& previous : prev->at(t)){
+                for (auto &previous : prev->at(t))
+                {
                     cout << previous << ",";
                 }
                 cout << "\n";
             }
         }
     }
+
     void printGraph()
     {
         cout << "\nGraph Contents... \n";
-        int v = 0;
-        for (int x = 0; x < adj->size(); x++)
+        for (auto &u : adj)
         {
             cout << "\n----------------------\n";
-            cout << "Vertex: " << x << "\n";
+            cout << "Vertex: " << u.first << "\n";
             cout << "Neighbors: ";
-            for (int y = 0; y < adj->at(x).size(); y++)
+            for (auto &v : u.second)
             {
-                cout << adj->at(x).at(y).vertex
-                     << "(" << adj->at(x).at(y).distance
-                     << ")"
+                cout << v.first << "(" << v.second << ")"
                      << ",";
             }
             cout << "\n----------------------\n";
         }
-    }
-
-    void deleteGraph()
-    {
-
-        //vector<vector<Edge>>().swap(adj);
-        delete[] dist;
-        delete[] prev;
     }
 
 private:
@@ -151,7 +152,7 @@ private:
     int E;
     int start;
     int end;
-    vector<vector<Edge>> *adj;
+    map<int, map<int, int>> adj;
     int *dist;
     vector<vector<int>> *prev;
 };
@@ -161,7 +162,8 @@ int main()
     Graph G = Graph{};
     G.createGraph();
     G.printGraph();
-    G.Dijkstra();
-    //G.deleteGraph();
+    G.dijkstra();
+    // G.almostShortestPath();
+    G.printShortestPath();
     return 0;
 }
