@@ -38,7 +38,7 @@ public:
                     lines += 1;
                     adj = new vector<vector<Edge>>(V);
                     dist = new int(V);
-                    prev = new int(V);
+                    prev = new vector<vector<int>>(V);
                 }
                 else if (lines == 1)
                 {
@@ -75,7 +75,6 @@ public:
             if (v != start)
             {
                 dist[v] = INFINITY;
-                prev[v] = UNDEFINED;
             }
             HeapNode node;
             node.data = v;
@@ -93,11 +92,16 @@ public:
                 if (alt < dist[neigh.vertex])
                 {
                     dist[neigh.vertex] = alt;
-                    prev[neigh.vertex] = u.data;
+                    prev->at(neigh.vertex).clear();
+                    prev->at(neigh.vertex).push_back(u.data);
                     HeapNode n;
                     n.data = neigh.vertex;
                     n.priority = alt;
                     Q.ChangeKey(n, alt);
+                }
+                else if (alt == dist[neigh.vertex]){
+                    dist[neigh.vertex] = alt;
+                    prev->at(neigh.vertex).push_back(u.data);
                 }
             }
         }
@@ -106,10 +110,11 @@ public:
         {
             if (t != start)
             {
-                cout << "Node " << t << " = "
-                     << dist[t] << " | "
-                                   "Prev "
-                     << prev[t] << "\n";
+                cout << "Node " << t << " = " << dist[t] << " | Previous = ";
+                for(auto& previous : prev->at(t)){
+                    cout << previous << ",";
+                }
+                cout << "\n";
             }
         }
     }
@@ -136,7 +141,7 @@ public:
     void deleteGraph()
     {
 
-        //vector<vector<Edge>>().swap(*adj);
+        //vector<vector<Edge>>().swap(adj);
         delete[] dist;
         delete[] prev;
     }
@@ -148,7 +153,7 @@ private:
     int end;
     vector<vector<Edge>> *adj;
     int *dist;
-    int *prev;
+    vector<vector<int>> *prev;
 };
 
 int main()
