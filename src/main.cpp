@@ -18,7 +18,7 @@ vector<Edge> *createGraph(int &start, int &end, int &V, int &E)
     vector<Edge> *adj;
 
     FILE *fptr;
-    if ((fptr = fopen("./include/tests/test-46.txt", "r")) == NULL)
+    if ((fptr = fopen("./include/tests/test-49.txt", "r")) == NULL)
     {
         printf("Error in opening file\n");
         exit(1);
@@ -58,11 +58,11 @@ vector<Edge> *createGraph(int &start, int &end, int &V, int &E)
 
     return adj;
 }
-void printGraph(vector<Edge> *adj)
+void printGraph(vector<Edge> *adj, int V)
 {
     cout << "\nGraph Contents... \n";
     int v = 0;
-    for (int x = 0; x < adj->size(); x++)
+    for (int x = 0; x < V; x++)
     {
         cout << "\n----------------------\n";
         cout << "Vertex: " << x << "\n";
@@ -83,7 +83,7 @@ void printShortestPath(int start, int V, int *dist, vector<int> *prev)
     for (int t = 0; t < V; t++)
     {
         if (t != start)
-        {   
+        {
             cout << "Node " << t << " = " << dist[t] << " | Previous = ";
             for (auto &previous : prev[t])
             {
@@ -137,13 +137,67 @@ void Dijkstra(vector<Edge> *adj,
         }
     }
 }
+void almostShortestPath(vector<Edge> *adj, vector<int> *prev, int start, int end, int V)
+{
+    bool discovered[V] = {false};
+    bool deleted[V] = {false};
+    discovered[end] = true;
+    vector<int> queue;
+    int u = 0, index = 0;
+    queue.push_back(end);
+    while (queue.size() > 0)
+    {
+        u = queue.front();
+        for (auto &edge : prev[u])
+        {
+            index = 0;
+            for (auto &v : adj[edge])
+            {
+                if (v.vertex == u)
+                {
+                    adj[edge].erase(adj[edge].begin() + index);
+                }
+                index += 1;
+            }
+            queue.push_back(edge);
+        }
+        queue.erase(queue.begin());
+    }
+}
+/*
+while (queue.size() > 0)
+    {
+        u = queue.front();
+        cout << "Front Queue: " << u << "\n";
+        for (auto &edge : prev[u])
+        {
+            index = 0;
+            for (auto &v : adj[edge])
+            {
+                if (v.vertex == u)
+                {
+                    adj[edge].erase(adj[edge].begin() + index);
+                    cout << "Erased edge: "
+                         << "(" << edge << "," << v.vertex << ")"
+                         << "\n";
+                }
+                index += 1;
+            }
+            queue.push_back(edge);
+        }
+        queue.erase(queue.begin());
+    }
+
+*/
 int main()
 {
     int V = 0, E = 0, start = 0, end = 0;
     vector<Edge> *adj = createGraph(start, end, V, E);
-    printGraph(adj);
+    // printGraph(adj);
     int *dist = new int(V);
     vector<int> *prev = new vector<int>[V];
     Dijkstra(adj, dist, prev, start, V);
-    printShortestPath(start, V, dist, prev);
+    // printShortestPath(start, V, dist, prev);
+    almostShortestPath(adj, prev, start, end, V);
+    printGraph(adj, V);
 }
