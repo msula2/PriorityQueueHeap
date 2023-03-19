@@ -2,6 +2,7 @@
 #include <vector>
 #include <queue>
 #include <heap.hpp>
+#include <stdio.h>
 
 using namespace std;
 
@@ -79,40 +80,48 @@ void bfsDelete(vector<pair<int, int>> adj[], vector<int> prev[], int start, int 
 }
 int main()
 {
-    int V = 0, E = 0, start = 0, end = 0;
     FILE *fptr;
-    if ((fptr = fopen("./include/tests/test-35.txt", "r")) == NULL)
+    if ((fptr = fopen("./include/tests/INPUT.txt", "r")) == NULL)
     {
         printf("Error in opening file\n");
         exit(1);
     }
-    int v1 = 0, v2 = 0, distance = 0, z1 = 0, z2 = 0;
-    fscanf(fptr, "%d %d\n", &V, &E);
-    fscanf(fptr, "%d %d\n", &start, &end);
-    vector<pair<int, int>> adj[V];
-    for (int i = 0; i < E; i++)
+    while (!feof(fptr))
     {
-        fscanf(fptr, "%d %d %d\n", &v1, &v2, &distance);
-        if (v1 != v2)
+        int V = 0, E = 0, start = 0, end = 0;
+
+        int v1 = 0, v2 = 0, distance = 0, z1 = 0, z2 = 0;
+        fscanf(fptr, "%d %d\n", &V, &E);
+        if(V == 0 && E == 0){
+            fclose(fptr);
+            break;
+        }
+        fscanf(fptr, "%d %d\n", &start, &end);
+        vector<pair<int, int>> adj[V];
+        for (int i = 0; i < E; i++)
         {
-            adj[v1].push_back(make_pair(v2, distance));
+            fscanf(fptr, "%d %d %d\n", &v1, &v2, &distance);
+            if (v1 != v2)
+            {
+                adj[v1].push_back(make_pair(v2, distance));
+            }
+        }
+        int dist[V];
+        vector<int> prev[V];
+        Dijkstra(start, adj, V, dist, prev);
+        bfsDelete(adj, prev, start, end, V);
+        Dijkstra(start, adj, V, dist, prev);
+
+        if (dist[end] != INF)
+        {
+            cout << dist[end] << "\n";
+        }
+        else
+        {
+            cout << "-1"
+                 << "\n";
         }
     }
-    fscanf(fptr, "%d %d\n", &z1, &z2);
-    fclose(fptr);
-    int dist[V];
-    vector<int> prev[V];
-    Dijkstra(start, adj, V, dist, prev);
-    bfsDelete(adj, prev, start, end, V);
-    Dijkstra(start, adj, V, dist, prev);
-
-    if (dist[end] != INF){
-        cout << dist[end] << "\n";
-    }
-    else{
-        cout << "-1" << "\n";
-    }
-    
 
     return 0;
 }
