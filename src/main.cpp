@@ -7,10 +7,8 @@ using namespace std;
 
 const int INF = 1e9; // infinity
 
-void Dijkstra(int start, vector<pair<int, int>> adj[], int V, int * dist)
+void Dijkstra(int start, vector<pair<int, int>> adj[], int V, int dist[], vector<int> prev[])
 {
-    // priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    // pq.push(make_pair(0, start)); // push the starting vertex with distance 0
     Heap pq{};
     pq.StartHeap(V);
     dist[start] = 0;
@@ -27,8 +25,6 @@ void Dijkstra(int start, vector<pair<int, int>> adj[], int V, int * dist)
     }
     while (pq.getHeapSize() > 0)
     {
-        // int u = pq.top().second;
-        // pq.pop();
         HeapNode min = pq.FindMin();
         pq.ExtractMin();
         int u = min.data;
@@ -40,21 +36,52 @@ void Dijkstra(int start, vector<pair<int, int>> adj[], int V, int * dist)
             if (dist[neighbor] > dist[u] + weight)
             {
                 dist[neighbor] = dist[u] + weight;
-                // pq.push(make_pair(dist[neighbor], neighbor));
+                prev[neighbor].clear();
+                prev[neighbor].push_back(u);
                 HeapNode n;
                 n.data = neighbor;
                 n.priority = dist[neighbor];
                 pq.ChangeKey(n, dist[neighbor]);
             }
+            else if (dist[u] + weight == dist[neighbor])
+            {
+                prev[neighbor].push_back(u);
+            }
         }
     }
 }
-
+void bfsDelete(vector<pair<int, int>> adj[], vector<int> prev[], int start, int end, int V)
+{
+    bool discovered[V] = {false};
+    bool deleted[V] = {false};
+    discovered[end] = true;
+    vector<int> queue;
+    int u = 0, index = 0;
+    queue.push_back(end);
+    while (queue.size() > 0)
+    {
+        u = queue.front();
+        for (auto &edge : prev[u])
+        {
+            index = 0;
+            for (auto &v : adj[edge])
+            {
+                if (v.first == u)
+                {
+                    adj[edge].erase(adj[edge].begin() + index);
+                }
+                index += 1;
+            }
+            queue.push_back(edge);
+        }
+        queue.erase(queue.begin());
+    }
+}
 int main()
 {
     int V = 0, E = 0, start = 0, end = 0;
     FILE *fptr;
-    if ((fptr = fopen("./include/tests/test-18.txt", "r")) == NULL)
+    if ((fptr = fopen("./include/tests/test-35.txt", "r")) == NULL)
     {
         printf("Error in opening file\n");
         exit(1);
@@ -73,13 +100,19 @@ int main()
     }
     fscanf(fptr, "%d %d\n", &z1, &z2);
     fclose(fptr);
-    int * dist = new int[V];
-    Dijkstra(start, adj, V, dist);
+    int dist[V];
+    vector<int> prev[V];
+    Dijkstra(start, adj, V, dist, prev);
+    bfsDelete(adj, prev, start, end, V);
+    Dijkstra(start, adj, V, dist, prev);
 
-    for (int i = 0; i < V; i++)
-    {
-        cout << "Shortest distance from " << start << " to " << i << " is " << dist[i] << endl;
+    if (dist[end] != INF){
+        cout << dist[end] << "\n";
     }
+    else{
+        cout << "-1" << "\n";
+    }
+    
 
     return 0;
 }
